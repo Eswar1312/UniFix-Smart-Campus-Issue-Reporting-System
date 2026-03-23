@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # UNIFIX – Campus Issue Management System
 
 > AI-powered complaint routing · Flask + MongoDB + React · Role-based access · SLA tracking
@@ -661,4 +662,3 @@ Run `python seed.py` as normal — no other changes needed.
 
 ---
 
-*UNIFIX v1.0.0 · Flask + MongoDB + React · Campus Issue Management System*
