@@ -1,0 +1,35 @@
+# ══════════════════════════════════════════════════════════
+# UNIFIX – Systemd Service
+# Place at: /etc/systemd/system/unifix.service
+#
+# Then run:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable unifix
+#   sudo systemctl start unifix
+#   sudo systemctl status unifix
+# ══════════════════════════════════════════════════════════
+
+[Unit]
+Description=UNIFIX Campus Issue Management System
+After=network.target mysql.service
+Requires=mysql.service
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/unifix/backend
+Environment="PATH=/var/www/unifix/venv/bin"
+EnvironmentFile=/var/www/unifix/backend/.env
+ExecStart=/var/www/unifix/venv/bin/gunicorn \
+    -c /var/www/unifix/deploy/gunicorn.conf.py \
+    "app:create_app()"
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,32 @@
+# UNIFIX – Gunicorn Systemd Service
+# Place at: /etc/systemd/system/unifix.service
+# Enable:   sudo systemctl enable unifix
+# Start:    sudo systemctl start unifix
+# Logs:     sudo journalctl -u unifix -f
+
+[Unit]
+Description=UNIFIX Campus Issue Management – Flask/Gunicorn
+After=network.target mysql.service
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/unifix/backend
+EnvironmentFile=/var/www/unifix/backend/.env
+ExecStart=/var/www/unifix/venv/bin/gunicorn \
+    --workers 4 \
+    --worker-class sync \
+    --bind 127.0.0.1:5000 \
+    --timeout 60 \
+    --access-logfile /var/log/unifix/access.log \
+    --error-logfile  /var/log/unifix/error.log \
+    wsgi:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

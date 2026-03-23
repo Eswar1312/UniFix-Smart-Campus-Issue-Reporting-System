@@ -1,0 +1,10 @@
+# ══════════════════════════════════════════════════════════
+# UNIFIX – Cron Jobs
+# Add to crontab: sudo crontab -e
+# ══════════════════════════════════════════════════════════
+
+# Check SLA breaches every hour and alert super admin
+0 * * * * curl -s -X POST http://127.0.0.1:5000/admin/check-sla >> /var/log/unifix/sla-cron.log 2>&1
+
+# Optional: Daily DB backup at 2am
+# 0 2 * * * mysqldump -u unifix_user -p'strongpassword' unifix_db > /var/backups/unifix/unifix_$(date +\%F).sql
